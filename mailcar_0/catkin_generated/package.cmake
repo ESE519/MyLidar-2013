@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "mailcar_0")
-set(mailcar_0_MAINTAINER "jeff <jeff@todo.todo>")
-set(mailcar_0_DEPRECATED "")
-set(mailcar_0_VERSION "0.0.0")
-set(mailcar_0_BUILD_DEPENDS "roscpp" "rospy" "geometry_msgs" "message_generation" "rosconsole" "roscpp" "roscpp_serialization" "roslib" "rostime" "std_msgs" "std_srvs")
-set(mailcar_0_RUN_DEPENDS "geometry_msgs" "message_runtime" "rosconsole" "roscpp" "roscpp_serialization" "roslib" "rostime" "std_msgs" "std_srvs")
-set(mailcar_0_BUILDTOOL_DEPENDS "catkin")
