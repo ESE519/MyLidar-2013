@@ -1,0 +1,8 @@
+prefix=/home/jeff/catkin_ws/install
+
+Name: mailcar_0
+Description: Description of mailcar_0
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/jeff/catkin_ws/install/lib 
+Requires: geometry_msgs message_runtime std_msgs std_srvs
