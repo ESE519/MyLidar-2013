@@ -61,9 +61,9 @@ void ImuNode::get_imu_data(const geometry_msgs::TwistStamped& imu_msg)
  {
     if((i==0)||(i==4)||(i==8)) 
     {
-       imu_sensor_msg.orientation_covariance[i] = (double)-1;
-       imu_sensor_msg.angular_velocity_covariance[i] = (double)-1;
-       imu_sensor_msg.linear_acceleration_covariance[i] = (double)-1;
+       imu_sensor_msg.orientation_covariance[i] = (double)0.01;
+       imu_sensor_msg.angular_velocity_covariance[i] = (double)0.01;
+       imu_sensor_msg.linear_acceleration_covariance[i] = (double)0.01;
     }
     else{
         imu_sensor_msg.orientation_covariance[i] = (double)0.0;
