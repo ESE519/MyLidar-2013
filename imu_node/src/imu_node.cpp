@@ -27,7 +27,7 @@ ros::Publisher imu_pub_;
    ros::Subscriber imu_sub;
     ros::NodeHandle nh_;
    void init(){
-    imu_pub_ = nh_.advertise<sensor_msgs::Imu>("imu_data", 100);
+    imu_pub_ = nh_.advertise<sensor_msgs::Imu>("imu_topic", 100);
   imu_sub = nh_.subscribe("imu_test", 100, &ImuNode::get_imu_data, this);
    }
 
