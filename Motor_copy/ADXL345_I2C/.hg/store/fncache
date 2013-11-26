@@ -1,0 +1,4 @@
+data/main.cpp.i
+data/ADXL345_I2C.cpp.i
+data/ADXL345_I2C.h.i
+data/mbed.bld.i
