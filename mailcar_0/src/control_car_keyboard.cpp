@@ -12,7 +12,9 @@
 #define KEYCODE_U 0x41
 #define KEYCODE_D 0x42
 #define KEYCODE_Q 0x71
+#define KEYCODE_W 0x77
 
+//A : 97 E: 101 ENTER : 10 space : 32
 class TeleopCar
 {
 public:
@@ -108,6 +110,11 @@ void TeleopCar::keyLoop()
       case KEYCODE_D:
         ROS_DEBUG("DOWN");
         velocity.data = 4;
+        dirty = true;
+        break;
+      case KEYCODE_W:
+        ROS_DEBUG("PUSH");
+        velocity.data = 5;
         dirty = true;
         break;
     }
