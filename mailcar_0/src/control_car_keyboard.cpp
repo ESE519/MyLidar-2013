@@ -7,14 +7,13 @@
 #include <termios.h>
 #include <stdio.h>
 
-#define KEYCODE_R 0x43 
+#define KEYCODE_R 0x43
 #define KEYCODE_L 0x44
 #define KEYCODE_U 0x41
 #define KEYCODE_D 0x42
 #define KEYCODE_Q 0x71
 #define KEYCODE_W 0x77
 
-//A : 97 E: 101 ENTER : 10 space : 32
 class TeleopCar
 {
 public:
@@ -64,11 +63,11 @@ void TeleopCar::keyLoop()
   bool dirty=false;
 
 
-  // get the console in raw mode                                                              
+  // get the console in raw mode
   tcgetattr(kfd, &cooked);
   memcpy(&raw, &cooked, sizeof(struct termios));
   raw.c_lflag &=~ (ICANON | ECHO);
-  // Setting a new line, then end of file                         
+  // Setting a new line, then end of file
   raw.c_cc[VEOL] = 1;
   raw.c_cc[VEOF] = 2;
   tcsetattr(kfd, TCSANOW, &raw);
@@ -80,7 +79,7 @@ void TeleopCar::keyLoop()
 
   for(;;)
   {
-    // get the next event from the keyboard  
+    // get the next event from the keyboard
     if(read(kfd, &c, 1) < 0)
     {
       perror("read():");
@@ -112,7 +111,7 @@ void TeleopCar::keyLoop()
         velocity.data = 4;
         dirty = true;
         break;
-      case KEYCODE_W:
+     case KEYCODE_W:
         ROS_DEBUG("PUSH");
         velocity.data = 5;
         dirty = true;
@@ -122,7 +121,7 @@ void TeleopCar::keyLoop()
     
     if(dirty ==true)
     {
-      twist_pub_.publish(velocity);    
+      twist_pub_.publish(velocity);
       dirty=false;
     }
   }
@@ -130,6 +129,3 @@ void TeleopCar::keyLoop()
 
   return;
 }
-
-
-

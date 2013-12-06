@@ -130,7 +130,7 @@ void EncoderOdom::readEncoder(const geometry_msgs::PointStamped& encoder)
   double delta_distance;
   double delta_theta;
   delta_distance = (encoder.point.x + encoder.point.y)*DISTANCE_PER_TICK/2;
-  delta_theta = (encoder.point.x - encoder.point.y)*DISTANCE_PER_TICK/WHEEL_BASE;
+  delta_theta = (encoder.point.y - encoder.point.x)*DISTANCE_PER_TICK/WHEEL_BASE;
   theta += delta_theta;
   theta -= (double)((int)(theta/2/PI))*2*PI;
   x_pose += delta_distance * cos(theta);
