@@ -116,6 +116,8 @@ add_executable(control_car_keyboard src/control_car_keyboard.cpp)
 target_link_libraries(control_car_keyboard ${catkin_LIBRARIES})
 add_executable(encoder_to_odom src/encoder_to_odom.cpp)
 target_link_libraries(encoder_to_odom ${catkin_LIBRARIES})
+add_executable(navigation_to_control src/navigation_to_control.cpp)
+target_link_libraries(navigation_to_control ${catkin_LIBRARIES})
 #add_dependencies(control_car_keyboard)
 # add_executable(myLidar_0_node src/myLidar_0_node.cpp)
 

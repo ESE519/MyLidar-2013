@@ -1,0 +1,6 @@
+<launch>
+
+ <include file="$(find mailcar_0)/launch/local_test.launch" />
+ <include file="$(find mailcar_0)/launch/move_base_test.launch" />
+
+</launch>

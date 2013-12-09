@@ -60,7 +60,7 @@ TeleopCar::TeleopCar()
 EncoderOdom::EncoderOdom()
 {
   puts("running encoder to odom:");
-  base_link = "/base_footprint";
+  base_link = "/base_link";
   odom = "/odom";
   encoder_sub_ = nh_.subscribe("/car/encoder",100,&EncoderOdom::readEncoder, this);
   t_.header.seq = 0;
