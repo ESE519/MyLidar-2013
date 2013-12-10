@@ -1,5 +1,8 @@
- <launch>
- 
+<launch>
+
+ <node pkg="tf" type="static_transform_publisher" name="foot_to_base_broadcaster"      args="0 0 0 0 0 0 /base_footprint /base_link 100" />  
+ <node pkg="mailcar_0" type="encoder_to_odom" name="encoder_to_odom" /> 
+ <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" />
  <param name="/use_sim_time" value="false"/>ros
  
  <node pkg="rviz" type="rviz" name="rviz" 
