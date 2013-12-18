@@ -1,14 +1,18 @@
 <launch>
 
-<!-- <node pkg="map_server" type="map_server" name="detkin_map" args="/home/bobo/Documents/maps/dorm.yaml" /> -->
-<node pkg="amcl" type="amcl" name="amcl" />
-<node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" />
-<node pkg="rosserial_python" type="serial_node.py" name="connection_to_car" args="/dev/ttyACM1" />
+<!-- <node pkg="map_server" type="map_server" name="detkin_map" args="/home/jeff/Moore2Floor1.yaml" /> -->
+ <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" />
+ <node pkg="rosserial_python" type="serial_node.py" name="connection_to_car" args="/dev/ttyACM1" />
+ <node pkg="mailcar_0" type="encoder_to_odom" name="odomtf_publisher" />
 <node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster_nav"  args="0 0 0 0 0 0 /base_link /laser 100" />
 <node pkg="tf" type="static_transform_publisher" name="foot_to_base_broadcasternav"  args="0 0 0 0 0 0 /base_footprint /base_link 100" />
-<!-- <node pkg="mailcar_0" type="control_car_keyboard" name="car_controller" /> -->
-<node pkg="mailcar_0" type="encoder_to_odom" name="odomtf_publisher" />
-<node pkg="rviz" type="rviz" name="rviz" 
-args="-d $(find mailcar_0)/rviz_cfg/mailcar_nav_1.rviz"/>
+<!-- <node pkg="amcl" type="amcl" name="amcl" >
+    <param name="max_particles"  value="500"/>
+    <param name="update_min_a" value="0.20943951023" />
+    <param name="first_map_only" value="false" /> 
+    <param name="laser_max_beams" value="50" />
+</node> -->
+<!-- <node pkg="rviz" type="rviz" name="rviz"  -->
+<!-- args="-d $(find mailcar_0)/rviz_cfg/mailcar_nav_1.rviz"/> -->
 
 </launch>

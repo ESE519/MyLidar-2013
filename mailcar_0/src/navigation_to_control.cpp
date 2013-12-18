@@ -6,6 +6,9 @@
 #include <signal.h>
 #include <termios.h>
 #include <stdio.h>
+#include <ros/message_operations.h>
+#include <std_msgs/Header.h>
+#include <actionlib_msgs/GoalStatusArray.h>
 
 #define KEYCODE_R 0x43
 #define KEYCODE_L 0x44
@@ -19,12 +22,16 @@ class CarAutoController
 public:
   CarAutoController();
   void readVelocity(const geometry_msgs::Twist& velocity_twist);
+  void readGoalStat(const actionlib_msgs::GoalStatusArray result);
   ros::Publisher twist_pub_;
   ros::Subscriber twist_sub_;
+  ros::Subscriber goal_status_sub_;
 
 private:
   ros::NodeHandle nh_;
   std_msgs::Int8 velocity;
+  actionlib_msgs::GoalStatus localResult;
+  std::string goal;
 
 };
 
@@ -33,8 +40,15 @@ CarAutoController::CarAutoController()
 {
   puts("running navigation_to_control:");
   puts("******************************");
+  goal="/goalll";
   twist_sub_ = nh_.subscribe("/cmd_vel",100,&CarAutoController::readVelocity, this);
+  goal_status_sub_ = nh_.subscribe("/move_base/status",100,&CarAutoController::readGoalStat, this);
   velocity.data = 0;
+  localResult.goal_id.stamp.sec = 0;
+  localResult.goal_id.stamp.nsec = 0;
+  localResult.goal_id.id = goal;
+  localResult.status = 0;
+  localResult.text = goal;
   twist_pub_ = nh_.advertise<std_msgs::Int8>("car/cmd_vel",1);
 }
 
@@ -76,26 +90,33 @@ int main(int argc, char** argv)
 void CarAutoController::readVelocity(const geometry_msgs::Twist& velocity_twist)
 {
   ROS_DEBUG("value: 0x%02f\n", velocity_twist.angular.z);
-  if (velocity_twist.linear.x > 0.01 )
+  if (velocity_twist.linear.x > 0.2 )
   {
     velocity.data = 3;
   }
   else
   {
-    if (velocity_twist.linear.y > 0.01)
+    if (velocity_twist.angular.z > 0.4)
     {
       velocity.data = 1;
     }
-    else if (velocity_twist.linear.y < -0.01)
+    else if (velocity_twist.angular.z < -0.4)
     {
       velocity.data = 2;
     }
     else
     {
-      velocity.data = 4;
+      if (velocity_twist.angular.z != 0)
+        velocity.data = 3;
+      else
+        velocity.data = 4;
     }
   }
 
+  if (localResult.status == 3) 
+  {
+    velocity.data = 5;
+  }
 
 
 
@@ -126,5 +147,13 @@ void CarAutoController::readVelocity(const geometry_msgs::Twist& velocity_twist)
   //   }
   // }
   twist_pub_.publish(velocity);
+  ros::spinOnce();
+}
+
+
+
+void CarAutoController::readGoalStat(const actionlib_msgs::GoalStatusArray result)
+{
+  localResult.status = result.status_list[0].status;
   ros::spinOnce();
 }

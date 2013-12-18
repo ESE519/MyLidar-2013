@@ -37,12 +37,16 @@ public:
   ros::Subscriber encoder_sub_;
   void readEncoder(const geometry_msgs::PointStamped& encoder);
   tf::TransformBroadcaster odom_broad_;
+  tf::TransformBroadcaster odom_broad_test_;
 
 private:
   ros::NodeHandle nh_;
   geometry_msgs::TransformStamped t_;
+  geometry_msgs::TransformStamped test_;
   std::string base_link;
   std::string odom;
+  std::string test_from;
+  std::string test_to;
   double x_pose;
   double y_pose;
   double theta;
@@ -62,6 +66,8 @@ EncoderOdom::EncoderOdom()
   puts("running encoder to odom:");
   base_link = "/base_footprint";
   odom = "/odom";
+  test_from = "/from";
+  test_to = "/to";
   encoder_sub_ = nh_.subscribe("/car/encoder",100,&EncoderOdom::readEncoder, this);
   t_.header.seq = 0;
   t_.header.frame_id = odom;
@@ -72,10 +78,20 @@ EncoderOdom::EncoderOdom()
   t_.transform.translation.y = 0;
   t_.transform.translation.z = 0;
   t_.transform.rotation = tf::createQuaternionMsgFromYaw(0);
+  test_.header.seq = 0;
+  test_.header.frame_id = test_from;
+  test_.header.stamp.sec = 0;
+  test_.header.stamp.nsec = 0;
+  test_.child_frame_id = test_to;
+  test_.transform.translation.x = 0;
+  test_.transform.translation.y = 0;
+  test_.transform.translation.z = 0;
+  test_.transform.rotation = tf::createQuaternionMsgFromYaw(0);
   x_pose = 0;
   y_pose = 0;
   theta = 0;
-  odom_broad_.sendTransform(t_);
+  odom_broad_.sendTransform(t_);  
+  odom_broad_test_.sendTransform(test_);
 }
 
 int kfd = 0;
@@ -140,7 +156,13 @@ void EncoderOdom::readEncoder(const geometry_msgs::PointStamped& encoder)
   t_.transform.translation.x = x_pose;
   t_.transform.translation.y = y_pose;
   t_.transform.rotation = tf::createQuaternionMsgFromYaw (theta);
+  test_.header.seq = encoder.header.seq;
+  test_.header.stamp = ros::Time::now();
+  test_.transform.translation.x = encoder.point.x;
+  test_.transform.translation.y = encoder.point.y;
+  test_.transform.rotation = tf::createQuaternionMsgFromYaw (theta);
   odom_broad_.sendTransform(t_);
+  odom_broad_test_.sendTransform(test_);
   ros::spinOnce();
 }
 

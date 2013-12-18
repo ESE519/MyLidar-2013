@@ -6,8 +6,8 @@
     <!-- <remap from="/odom" to="/pr2/Odometry"/> -->
 
     <param name="footprint_padding" value="0.01" />
-    <param name="controller_frequency" value="10.0" />
-    <param name="controller_patience" value="60.0" />
+    <param name="controller_frequency" value="2.0" />
+    <param name="controller_patience" value="30.0" />
     <param name="planner_frequency" value="2.0" />
 
     <rosparam file="$(find mailcar_0)/launch/move_base/costmap_common_params.yaml" command="load" ns="global_costmap" />

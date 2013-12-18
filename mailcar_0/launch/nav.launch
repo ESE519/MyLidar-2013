@@ -1,7 +1,10 @@
 <launch>
 
 <node pkg="map_server" type="map_server" name="detkin_map" args="/home/bobo/detkin2.yaml" />
-<node pkg="amcl" type="amcl" name="amcl" />
+<node pkg="amcl" type="amcl" name="amcl" >
+    <param name="max_particles"  value="500"/>
+    <param name="update_min_a" value="0.20943951023" />
+</node>
 <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" />
 <!-- <node pkg="rosserial_python" type="serial_node.py" name="connection_to_car" args="/dev/ttyACM1" /> -->
 <node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster_nav"  args="0 0 0 0 0 0 /base_link /laser 100" />
