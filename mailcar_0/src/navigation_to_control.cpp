@@ -1,5 +1,5 @@
-//reference to : https://github.com/ros/ros_tutorials/blob/hydro-devel/turtlesim/tutorials/teleop_turtle_key.cpp
-
+//navigation_to_control
+//this class is to transform the data from ROS topic /cmd_vel to control command of the car
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Int8.h>
@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <ros/message_operations.h>
 #include <std_msgs/Header.h>
-#include <actionlib_msgs/GoalStatusArray.h>
+#include <move_base_msgs/MoveBaseActionResult.h>
 
 #define KEYCODE_R 0x43
 #define KEYCODE_L 0x44
@@ -19,10 +19,13 @@
 
 class CarAutoController
 {
+  // subscriber twist_sub_ subscribes to topic /cmd_vel, getting control message from navigation
+  // subscriver goal_status_sub_ subscrives to topic /move_base/result, getting navigation status
+  // Publisher twist_pub_ publish the topic /car/cmd_vel, mBed will subscribe on this topic
 public:
   CarAutoController();
   void readVelocity(const geometry_msgs::Twist& velocity_twist);
-  void readGoalStat(const actionlib_msgs::GoalStatusArray result);
+  void readGoalStat(const move_base_msgs::MoveBaseActionResult result);
   ros::Publisher twist_pub_;
   ros::Subscriber twist_sub_;
   ros::Subscriber goal_status_sub_;
@@ -42,7 +45,7 @@ CarAutoController::CarAutoController()
   puts("******************************");
   goal="/goalll";
   twist_sub_ = nh_.subscribe("/cmd_vel",100,&CarAutoController::readVelocity, this);
-  goal_status_sub_ = nh_.subscribe("/move_base/status",100,&CarAutoController::readGoalStat, this);
+  goal_status_sub_ = nh_.subscribe("/move_base/result",100,&CarAutoController::readGoalStat, this);
   velocity.data = 0;
   localResult.goal_id.stamp.sec = 0;
   localResult.goal_id.stamp.nsec = 0;
@@ -90,6 +93,18 @@ int main(int argc, char** argv)
 void CarAutoController::readVelocity(const geometry_msgs::Twist& velocity_twist)
 {
   ROS_DEBUG("value: 0x%02f\n", velocity_twist.angular.z);
+  // here is the transformation.
+  // this algorithm needs to be refined
+  // if x direction has speed, the go straight
+  // else 
+  //      if z > threshold, turn left
+  //      else if z < threshold, turn right
+  //      else
+  //            if z != 0, go straight. NEEDREFINE
+  //            else: here [[0 0 0] [0 0 0]], wait for instruction
+  //if result.status = 3, means destination is reached
+  //     should wait for some time and push the box.
+
   if (velocity_twist.linear.x > 0.2 )
   {
     velocity.data = 3;
@@ -152,8 +167,8 @@ void CarAutoController::readVelocity(const geometry_msgs::Twist& velocity_twist)
 
 
 
-void CarAutoController::readGoalStat(const actionlib_msgs::GoalStatusArray result)
+void CarAutoController::readGoalStat(const move_base_msgs::MoveBaseActionResult result)
 {
-  localResult.status = result.status_list[0].status;
+  localResult.status = result.status.status;
   ros::spinOnce();
 }

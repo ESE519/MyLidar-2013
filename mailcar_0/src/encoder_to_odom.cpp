@@ -1,4 +1,10 @@
-//reference to : https://github.com/ros/ros_tutorials/blob/hydro-devel/turtlesim/tutorials/teleop_turtle_key.cpp
+  //this class is to implement the transformation from encoder data to encoder data that ROS can uses
+  //encoder is the data sent from mbed to ROS, where x is the count of left wheel encoder
+  //, and y is the count of right wheel encoder
+  //next will calculate the position of the car in the world based on the encoder info
+  //    x_pose is the x position corresponding to the fixed fram
+  //    y_pose is the y position corresponding to the fixed frame
+  //    theta is the angle of x direction between the car's frame and the fixed frame.
 
 #include <ros/ros.h>
 //#include <geometry_msgs/Twist.h>
@@ -145,6 +151,12 @@ void EncoderOdom::readEncoder(const geometry_msgs::PointStamped& encoder)
 {
   double delta_distance;
   double delta_theta;
+  //encoder is the data sent from mbed to ROS, where x is the count of left wheel encoder
+  //, and y is the count of right wheel encoder
+  //next will calculate the position of the car in the world based on the encoder info
+  //    x_pose is the x position corresponding to the fixed frame
+  //    y_pose is the y position corresponding to the fixed frame
+  //    theta is the angle of x direction between the car's frame and the fixed frame.
   delta_distance = (encoder.point.x + encoder.point.y)*DISTANCE_PER_TICK/2;
   delta_theta = (encoder.point.y - encoder.point.x)*DISTANCE_PER_TICK/WHEEL_BASE;
   theta += delta_theta;
@@ -156,6 +168,8 @@ void EncoderOdom::readEncoder(const geometry_msgs::PointStamped& encoder)
   t_.transform.translation.x = x_pose;
   t_.transform.translation.y = y_pose;
   t_.transform.rotation = tf::createQuaternionMsgFromYaw (theta);
+
+  //test_ here is for debug, to see if the data from encoder is correctly received by this method.
   test_.header.seq = encoder.header.seq;
   test_.header.stamp = ros::Time::now();
   test_.transform.translation.x = encoder.point.x;

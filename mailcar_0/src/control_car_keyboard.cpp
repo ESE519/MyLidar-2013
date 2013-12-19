@@ -1,5 +1,11 @@
 //reference to : https://github.com/ros/ros_tutorials/blob/hydro-devel/turtlesim/tutorials/teleop_turtle_key.cpp
-
+// this calss is to publish a control command, for the mBed to subscribe to control the car.
+// use arrow keys to control movement: 
+//    up---straight
+//    down---stop
+//    right---turn right
+//    left---turn left
+//    w---push the box
 #include <ros/ros.h>
 //#include <geometry_msgs/Twist.h>
 #include <std_msgs/Int8.h>
